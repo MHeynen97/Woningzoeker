@@ -24,6 +24,22 @@ public class GebruikerController {
         return ResponseEntity.ok(gebruikers);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Gebruiker> getGebruikerById(@PathVariable Long id) {
+        return gebruikerRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/naam/{gebruikersnaam}")
+    public ResponseEntity<Gebruiker> getGebruikerByGebruikersnaam(@PathVariable String gebruikersnaam) {
+        return gebruikerRepository.findByGebruikersnaam(gebruikersnaam)
+                .stream()
+                .findFirst()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<Gebruiker> posGebruiker(@RequestBody Gebruiker gebruiker){
         Gebruiker opgeslagenGebruiker = gebruikerRepository.save(gebruiker);
@@ -35,7 +51,26 @@ public class GebruikerController {
         List<Gebruiker> opgeslagenGebruikers = gebruikerRepository.saveAll(gebruikers);
         return ResponseEntity.status(HttpStatus.CREATED).body(opgeslagenGebruikers);
     }
-    //@PutMapping
 
-    //@DeleteMapping
+    @PutMapping("/{id}")
+    public ResponseEntity<Gebruiker> updateGebruiker(@PathVariable Long id, @RequestBody Gebruiker gebruiker){
+        var gevondenGebruiker = gebruikerRepository.findById(id);
+        if(gevondenGebruiker.isPresent()){
+            Gebruiker dbGebruiker = gevondenGebruiker.get();
+            dbGebruiker.setGebruikersnaam(gebruiker.getGebruikersnaam());
+            dbGebruiker.setEmail(gebruiker.getEmail());
+            gebruikerRepository.save(dbGebruiker);
+            return ResponseEntity.ok(dbGebruiker);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Gebruiker> deleteGebruiker(@PathVariable Long id) {
+        if (gebruikerRepository.existsById(id)) {
+            gebruikerRepository.deleteById(id);
+            return ResponseEntity.noContent().build(); // 204: succesvol verwijderd, geen body
+        }
+        return ResponseEntity.notFound().build(); // 404: niet gevonden
+    }
 }
