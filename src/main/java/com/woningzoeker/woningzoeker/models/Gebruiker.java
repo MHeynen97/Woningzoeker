@@ -3,7 +3,7 @@ package com.woningzoeker.woningzoeker.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "gebruikers")
+@Table(name = "Gebruikers")
 public class Gebruiker {
 
     // velden

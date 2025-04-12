@@ -20,7 +20,7 @@ public class GebruikerController {
     @GetMapping
     public ResponseEntity<List<Gebruiker>> getGebruiker(@RequestParam(required = false) String gebruikersnaam){
         //if else statement
-        List<Gebruiker> gebruikers = (gebruikersnaam!=null) ? gebruikerRepository.findByGebruiker(gebruikersnaam) : gebruikerRepository.findAll();
+        List<Gebruiker> gebruikers = (gebruikersnaam!=null) ? gebruikerRepository.findByGebruikersnaam(gebruikersnaam) : gebruikerRepository.findAll();
         return ResponseEntity.ok(gebruikers);
     }
 
@@ -28,6 +28,12 @@ public class GebruikerController {
     public ResponseEntity<Gebruiker> posGebruiker(@RequestBody Gebruiker gebruiker){
         Gebruiker opgeslagenGebruiker = gebruikerRepository.save(gebruiker);
         return ResponseEntity.status(HttpStatus.CREATED).body(opgeslagenGebruiker);
+    }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<List<Gebruiker>> postGebruikers(@RequestBody List<Gebruiker> gebruikers) {
+        List<Gebruiker> opgeslagenGebruikers = gebruikerRepository.saveAll(gebruikers);
+        return ResponseEntity.status(HttpStatus.CREATED).body(opgeslagenGebruikers);
     }
     //@PutMapping
 

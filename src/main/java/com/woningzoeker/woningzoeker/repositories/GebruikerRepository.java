@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface GebruikerRepository extends JpaRepository<Gebruiker, Long> {
-    List<Gebruiker> findByGebruiker(String gebruikersnaam);
+    List<Gebruiker> findByGebruikersnaam(String gebruikersnaam);
 }
