@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "gebruikers")
 public class Gebruiker {
 
+    // velden
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -14,12 +15,15 @@ public class Gebruiker {
 
     private String email;
 
-    // Constructors, Getters, and Setters
+   //constructor
+    public Gebruiker() {}
+
     public Gebruiker(String gebruikersnaam, String email) {
         this.gebruikersnaam = gebruikersnaam;
         this.email = email;
     }
 
+    //Getters, and Setters
     public long getId() {
         return id;
     }
