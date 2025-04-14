@@ -106,14 +106,14 @@ public class Profiel {
     public String getInkomendeBerichten() {
         return inkomendeBerichten;
     }
-    public void setInkomendeBerichten(){
-        this.inkomendeBerichten = inkomendeBerichten;
+    public void setInkomendeBerichten(String inkomendeBerichten){
+        this.inkomendeBerichten = this.inkomendeBerichten;
     }
 
     public String getUitgaandeBerichten() {
         return uitgaandeBerichten;
     }
-    public void setUitgaandeBerichten(){
-        this.uitgaandeBerichten = uitgaandeBerichten;
+    public void setUitgaandeBerichten(String uitgaandeBerichten){
+        this.uitgaandeBerichten = this.uitgaandeBerichten;
     }
 }

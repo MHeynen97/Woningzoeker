@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ProfielRepository extends JpaRepository<Profiel, Integer> {
-    List<Profiel> findByProfielname(String profielname);
+public interface ProfielRepository extends JpaRepository<Profiel, Long> {
+    List<Profiel> findByGebruikersnaam(String gebruikersnaam);
     List<Profiel> findByFavorieteHuizen(String favorieteHuizen);
     List<Profiel> findByInkomendeBerichten(String inkomendeBerichten);
     List<Profiel> findByUitgaandeBerichten(String uitgaandeBerichten);
