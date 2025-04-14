@@ -31,6 +31,7 @@ public class GebruikerController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // is dit niet dubbelop met de andere getmapping waar gebruikersnaam mee gegeven kan worden in de url?
     @GetMapping("/naam/{gebruikersnaam}")
     public ResponseEntity<Gebruiker> getGebruikerByGebruikersnaam(@PathVariable String gebruikersnaam) {
         return gebruikerRepository.findByGebruikersnaam(gebruikersnaam)
@@ -41,7 +42,7 @@ public class GebruikerController {
     }
 
     @PostMapping
-    public ResponseEntity<Gebruiker> posGebruiker(@RequestBody Gebruiker gebruiker){
+    public ResponseEntity<Gebruiker> postGebruiker(@RequestBody Gebruiker gebruiker){
         Gebruiker opgeslagenGebruiker = gebruikerRepository.save(gebruiker);
         return ResponseEntity.status(HttpStatus.CREATED).body(opgeslagenGebruiker);
     }
