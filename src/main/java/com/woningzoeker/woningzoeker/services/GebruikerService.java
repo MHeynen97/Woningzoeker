@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Service
 public class GebruikerService {
+    //ToDo uitzoeken of er bijzondere regels zijn voor de gebruikers die hierin moeten worden toegevoegd.
 
     private final GebruikerRepository gebruikerRepository;
 

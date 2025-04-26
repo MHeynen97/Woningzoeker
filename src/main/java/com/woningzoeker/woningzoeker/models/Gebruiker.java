@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 @Table(name = "Gebruikers")
 public class Gebruiker {
 
-    // velden
+
+    //ToDo toevoegen van checks op velden. Bijvoorbeeld : not blank. Niet voor od na een bepaalde datum etc.
+    //velden
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
