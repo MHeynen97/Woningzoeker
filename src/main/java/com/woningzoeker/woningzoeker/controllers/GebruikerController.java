@@ -26,6 +26,7 @@ public class GebruikerController {
     }
 
     @GetMapping("/{id}")
+
     public ResponseEntity<GebruikerResponseDto> getGebruikerById(@PathVariable Long id) {
         return gebruikerService.findById(id)
                 .map(GebruikerMapper::toResponseDTO)

@@ -17,13 +17,13 @@ public class Gebruiker {
 
     private String email;
 
-   //constructor
-    public Gebruiker() {}
-
+    //constructor
     public Gebruiker(String gebruikersnaam, String email) {
         this.gebruikersnaam = gebruikersnaam;
         this.email = email;
     }
+
+    public Gebruiker() {}
 
     //Getters, and Setters
     public long getId() {
