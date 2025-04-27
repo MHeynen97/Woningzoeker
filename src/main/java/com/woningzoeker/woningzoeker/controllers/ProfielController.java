@@ -1,7 +1,12 @@
 package com.woningzoeker.woningzoeker.controllers;
 
+import com.woningzoeker.woningzoeker.dtos.BiedingResponseDTO;
+import com.woningzoeker.woningzoeker.dtos.ProfielResponseDTO;
+import com.woningzoeker.woningzoeker.mappers.BiedingMapper;
+import com.woningzoeker.woningzoeker.mappers.ProfielMapper;
 import com.woningzoeker.woningzoeker.models.Profiel;
 import com.woningzoeker.woningzoeker.repositories.ProfielRepository;
+import com.woningzoeker.woningzoeker.services.ProfielService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,41 +17,47 @@ import java.util.List;
 @RequestMapping("/profiel")
 public class ProfielController {
 
-    private final ProfielRepository profielRepository;
-    public ProfielController(ProfielRepository profielRepository) {
-        this.profielRepository = profielRepository;
+    private final ProfielService profielService;
+    public ProfielController(ProfielService profielService) {
+        this.profielService = profielService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Profiel>> getProfiel(@RequestParam(required = false) String gebruikersnaam) {
-        List<Profiel> profielen = (gebruikersnaam!=null) ? profielRepository.findByGebruikersnaam(gebruikersnaam) : profielRepository.findAll();
-        return ResponseEntity.ok(profielen);
+    public ResponseEntity<List<ProfielResponseDTO>> getProfiel(@RequestParam(required = false) String gebruikersnaam) {
+        List<Profiel> profielen = (gebruikersnaam!=null) ? profielService.findByGebruikersnaam(gebruikersnaam) : profielService.findAll();
+        return ResponseEntity.ok(ProfielMapper.toResponseDTOList(profielen));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Profiel> getProfielById(@PathVariable Long id) {
-        return profielRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<List<ProfielResponseDTO>> getProfiel(@RequestParam(required = false) Long id){
+        if (id == null) {
+            var profiel = profielService.findAll();
+            return ResponseEntity.ok(ProfielMapper.toResponseDTOList(profiel));
+        } else {
+            return profielService.findById(id)
+                    .map(b -> List.of(ProfielMapper.toResponseDTO(b)))
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        }
     }
-
     @PostMapping
-    public ResponseEntity<Profiel> postProfiel(@RequestBody Profiel profiel){
-        Profiel opgeslagenProfiel = profielRepository.save(profiel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(opgeslagenProfiel);
+    public ResponseEntity<ProfielResponseDTO> postProfiel(@RequestBody Profiel profiel){
+        Profiel opgeslagenProfiel = profielService.save(profiel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ProfielMapper.toResponseDTO(opgeslagenProfiel));
     }
 
     @PostMapping("/bulk")
-    public ResponseEntity<List<Profiel>> postProfiel(@RequestBody List<Profiel> profiel){
-        List<Profiel> opgeslagenProfielen = profielRepository.saveAll(profiel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(opgeslagenProfielen);
+    public ResponseEntity<List<ProfielResponseDTO>> postProfiel(@RequestBody List<Profiel> profiel){
+        List<Profiel> opgeslagenProfielen = profielService.saveAll(profiel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ProfielMapper.toResponseDTOList(opgeslagenProfielen));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Profiel> updateProfiel(@PathVariable Long id, @RequestBody Profiel profiel){
-        var gevondenProfiel = profielRepository.findById(id);
+    public ResponseEntity<ProfielResponseDTO> updateProfiel(@PathVariable Long id, @RequestBody Profiel profiel){
+        var gevondenProfiel = profielService.findById(id);
         if(gevondenProfiel.isPresent()){
             Profiel dbProfiel = gevondenProfiel.get();
+
             dbProfiel.setGebruikersnaam(profiel.getGebruikersnaam());
             dbProfiel.setNaam(profiel.getNaam());
             dbProfiel.setGeboortedatum(profiel.getGeboortedatum());
@@ -56,19 +67,23 @@ public class ProfielController {
             dbProfiel.setFavorieteHuizen(profiel.getFavorieteHuizen());
             dbProfiel.setInkomendeBerichten(profiel.getInkomendeBerichten());
             dbProfiel.setUitgaandeBerichten(profiel.getUitgaandeBerichten());
-            profielRepository.save(dbProfiel);
-            return ResponseEntity.ok(dbProfiel);
+
+            Profiel updateProfiel = profielService.save(dbProfiel);
+
+            return ResponseEntity.ok(ProfielMapper.toResponseDTO(updateProfiel));
         }
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Profiel> deleteProfiel(@PathVariable Long id) {
-        if (profielRepository.existsById(id)) {
-            profielRepository.deleteById(id);
-            return ResponseEntity.noContent().build(); // 204: succesvol verwijderd, geen body
+    public ResponseEntity<Void> deleteProfiel(@PathVariable Long id) {
+        var result = profielService.delete(id);
+        if (result){
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build(); // 404: niet gevonden
+
     }
 
 }

@@ -25,6 +25,10 @@ public class GebruikerService {
         return  gebruikerRepository.saveAll(gebruikers);
     }
 
+    public List<Gebruiker> findAll() {
+        return gebruikerRepository.findAll();
+    }
+
     public Optional<Gebruiker> findById(Long id) {
         return gebruikerRepository.findById(id);
     }
@@ -53,4 +57,5 @@ public class GebruikerService {
 
         return gebruikers;
     }
+
 }

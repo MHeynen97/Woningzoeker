@@ -1,8 +1,6 @@
 package com.woningzoeker.woningzoeker.mappers;
 
-import com.woningzoeker.woningzoeker.dtos.LocatieResponseDTO;
 import com.woningzoeker.woningzoeker.dtos.ProfielResponseDTO;
-import com.woningzoeker.woningzoeker.models.Locatie;
 import com.woningzoeker.woningzoeker.models.Profiel;
 
 import java.util.List;
