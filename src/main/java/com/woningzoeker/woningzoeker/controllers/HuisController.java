@@ -1,7 +1,9 @@
 package com.woningzoeker.woningzoeker.controllers;
 
+import com.woningzoeker.woningzoeker.dtos.HuisResponseDTO;
+import com.woningzoeker.woningzoeker.mappers.HuisMapper;
 import com.woningzoeker.woningzoeker.models.Huis;
-import com.woningzoeker.woningzoeker.repositories.HuisRepository;
+import com.woningzoeker.woningzoeker.services.HuisService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,65 +11,79 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Huis")
+@RequestMapping("/huis")
 public class HuisController {
 
-    private final HuisRepository huisRepository;
-    public HuisController(HuisRepository huisRepository) {
-        this.huisRepository = huisRepository;
+    private final HuisService huisService;
+    public HuisController(HuisService huisService) {
+        this.huisService = huisService;
     }
 
+    // ToDo: Deze manier van getten (twee losse methodes) ook toepassen op de andere controllers.
     @GetMapping
-    public ResponseEntity<List<Huis>> getHuis(@RequestParam(required = false) String adres) {
-        List<Huis> Huizen = (adres!=null) ? huisRepository.findByAdres(adres) : huisRepository.findAll();
-        return ResponseEntity.ok(Huizen);
+    public ResponseEntity<List<HuisResponseDTO>> getAllHuizen() {
+        List<Huis> huizen = huisService.findAll();
+        return ResponseEntity.ok(HuisMapper.toResponseDTOList(huizen));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Huis> getHuisById(@PathVariable Long id) {
-        return huisRepository.findById(id)
-                .map(ResponseEntity::ok)
+    public ResponseEntity<HuisResponseDTO> getHuisById(@PathVariable Long id) {
+        return huisService.findById(id)
+                .map(huis -> ResponseEntity.ok(HuisMapper.toResponseDTO(huis)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Huis> postHuis(@RequestBody Huis huis){
-        Huis opgeslagenHuis = huisRepository.save(huis);
-        return ResponseEntity.status(HttpStatus.CREATED).body(opgeslagenHuis);
+    public ResponseEntity<HuisResponseDTO> postHuis(@RequestBody Huis huis){
+        Huis opgeslagenHuis = huisService.save(huis);
+        return ResponseEntity.status(HttpStatus.CREATED).body(HuisMapper.toResponseDTO(opgeslagenHuis));
     }
 
     @PostMapping("/bulk")
-    public ResponseEntity<List<Huis>> postHuizen(@RequestBody List<Huis> huis){
-        List<Huis> opgeslagenHuizen = huisRepository.saveAll(huis);
-        return ResponseEntity.status(HttpStatus.CREATED).body(opgeslagenHuizen);
+    public ResponseEntity<List<HuisResponseDTO>> postHuizen(@RequestBody List<Huis> huis){
+        List<Huis> opgeslagenHuizen = huisService.saveAll(huis);
+        return ResponseEntity.status(HttpStatus.CREATED).body(HuisMapper.toResponseDTOList(opgeslagenHuizen));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Huis> updateHuis(@PathVariable Long id, @RequestBody Huis huis){
-        var gevondenHuis = huisRepository.findById(id);
-        if(gevondenHuis.isPresent()){
+    public ResponseEntity<HuisResponseDTO> updateHuis(@PathVariable Long id, @RequestBody Huis huis) {
+        var gevondenHuis = huisService.findById(id);
+        if (gevondenHuis.isPresent()) {
             Huis dbHuis = gevondenHuis.get();
 
-            dbHuis.setAdres(huis.getAdres());
-            dbHuis.setPrijs(huis.getPrijs());
-            dbHuis.setAantalKamers(huis.getAantalKamers());
-            dbHuis.setEnergieLabel(huis.getEnergieLabel());
-            dbHuis.setFotos(huis.getFotos());
-            dbHuis.setOmschrijving(huis.getOmschrijving());
+            // Werk velden bij als ze aanwezig zijn
+            if (huis.getAdres() != null) {
+                dbHuis.setAdres(huis.getAdres());
+            }
+            if (huis.getPrijs() != 0) {
+                dbHuis.setPrijs(huis.getPrijs());
+            }
+            if (huis.getAantalKamers() != 0) {
+                dbHuis.setAantalKamers(huis.getAantalKamers());
+            }
+            if (huis.getEnergieLabel() != null) {
+                dbHuis.setEnergieLabel(huis.getEnergieLabel());
+            }
+            if (huis.getFotos() != null) {
+                dbHuis.setFotos(huis.getFotos());
+            }
+            if (huis.getOmschrijving() != null) {
+                dbHuis.setOmschrijving(huis.getOmschrijving());
+            }
 
-            huisRepository.save(dbHuis);
-            return ResponseEntity.ok(dbHuis);
+            Huis updateHuis = huisService.save(dbHuis);
+            return ResponseEntity.ok(HuisMapper.toResponseDTO(updateHuis));
         }
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Huis> deleteHuis(@PathVariable Long id) {
-        if (huisRepository.existsById(id)) {
-            huisRepository.deleteById(id);
-            return ResponseEntity.noContent().build(); // 204: succesvol verwijderd, geen body
+    public ResponseEntity<HuisResponseDTO> deleteHuis(@PathVariable Long id) {
+        var result = huisService.delete(id);
+        if (result) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build(); // 404: niet gevonden
     }
-
 }
