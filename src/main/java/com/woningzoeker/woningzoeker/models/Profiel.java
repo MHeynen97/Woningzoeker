@@ -11,7 +11,6 @@ public class Profiel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long Id;
-
     private String gebruikersnaam; // linken aan gebruiker
     private String naam;
     private Date geboortedatum;

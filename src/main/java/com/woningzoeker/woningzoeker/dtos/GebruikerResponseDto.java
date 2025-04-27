@@ -4,9 +4,7 @@ package com.woningzoeker.woningzoeker.dtos;
 public class GebruikerResponseDto {
 
     private Long id;
-
     private String gebruikersnaam;
-
     private String email;
 
 
@@ -14,11 +12,9 @@ public class GebruikerResponseDto {
     public Long getId() {
         return id;
     }
-
     public String getGebruikersnaam() {
         return gebruikersnaam;
     }
-
     public String getEmail() {
         return email;
     }
@@ -27,11 +23,9 @@ public class GebruikerResponseDto {
     public void setId(Long id) {
         this.id = id;
     }
-
     public void setGebruikersnaam(String gebruikersnaam) {
         this.gebruikersnaam = gebruikersnaam;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }

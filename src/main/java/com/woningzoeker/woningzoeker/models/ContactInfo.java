@@ -60,4 +60,12 @@ public class ContactInfo {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getTelefoonnummer() {
+        return telefoonnummer;
+    }
+
+    public void setTelefoonnummer(String telefoonnummer) {
+        this.telefoonnummer = telefoonnummer;
+    }
 }

@@ -27,7 +27,7 @@ public class GebruikerController {
 
     @GetMapping("/{id}")
 
-    public ResponseEntity<GebruikerResponseDto> getGebruikerById(@PathVariable Long id) {
+    public ResponseEntity<GebruikerResponseDto> getGebruikerById(@PathVariable long id) {
         return gebruikerService.findById(id)
                 .map(GebruikerMapper::toResponseDTO)
                 .map(ResponseEntity::ok)
@@ -47,7 +47,7 @@ public class GebruikerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GebruikerResponseDto> updateGebruiker(@PathVariable Long id, @RequestBody Gebruiker gebruiker){
+    public ResponseEntity<GebruikerResponseDto> updateGebruiker(@PathVariable long id, @RequestBody Gebruiker gebruiker){
         var gevondenGebruiker = gebruikerService.findById(id);
         if(gevondenGebruiker.isPresent()){
             Gebruiker dbGebruiker = gevondenGebruiker.get();
@@ -60,7 +60,7 @@ public class GebruikerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGebruiker(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteGebruiker(@PathVariable long id) {
         var result = gebruikerService.delete(id);
         if (result){
             return ResponseEntity.noContent().build();

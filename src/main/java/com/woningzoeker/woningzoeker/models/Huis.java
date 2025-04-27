@@ -24,18 +24,23 @@ public class Huis {
 
     private String omschrijving;
 
-   // private Enum<huurKoop>{
+    @Enumerated(EnumType.STRING)
+    private HuurKoop huurkoop;
 
+    public enum HuurKoop{
+        Huur,
+        Koop
+    }
 
     //Constructor
-    public Huis(String adres,int prijs, int aantalKamers, String energieLabel, String fotos, String omschrijving){
+    public Huis(String adres,int prijs, int aantalKamers, String energieLabel, String fotos, String omschrijving, HuurKoop huurkoop){
         this.adres = adres;
         this.prijs = prijs;
         this.aantalKamers = aantalKamers;
         this.energieLabel = energieLabel;
         this.fotos = fotos;
         this.omschrijving = omschrijving;
-        // Enum
+        this.huurkoop = huurkoop;
     }
     public Huis(){
     }
@@ -88,5 +93,12 @@ public class Huis {
     }
     public void setOmschrijving(String omschrijving) {
         this.omschrijving = omschrijving;
+    }
+
+    public HuurKoop getHuurkoop() {
+        return huurkoop;
+    }
+    public void setHuurkoop(HuurKoop huurkoop) {
+        this.huurkoop = huurkoop;
     }
 }

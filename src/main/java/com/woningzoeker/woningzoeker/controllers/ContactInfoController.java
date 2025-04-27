@@ -51,6 +51,7 @@ public class ContactInfoController {
             dbContactInfo.setEmail(contactInfo.getEmail());
             dbContactInfo.setGebruikerId(contactInfo.getGebruikerId());
             dbContactInfo.setProfielId(contactInfo.getProfielId());
+            dbContactInfo.setTelefoonnummer(contactInfo.getTelefoonnummer());
 
             contactInfoRepository.save(dbContactInfo);
             return ResponseEntity.ok(dbContactInfo);
