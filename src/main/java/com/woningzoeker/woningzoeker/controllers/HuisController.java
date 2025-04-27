@@ -19,17 +19,18 @@ public class HuisController {
         this.huisService = huisService;
     }
 
+    // ToDo: Deze manier van getten (twee losse methodes) ook toepassen op de andere controllers.
     @GetMapping
-    public ResponseEntity<List<HuisResponseDTO>> getHuis(@RequestParam(required = false) Long id){
-        if (id == null) {
-            var huizen = huisService.findAll();
-            return ResponseEntity.ok(HuisMapper.toResponseDTOList(huizen));
-        } else {
-            return huisService.findById(id)
-                    .map(b -> List.of(HuisMapper.toResponseDTO(b)))
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
-        }
+    public ResponseEntity<List<HuisResponseDTO>> getAllHuizen() {
+        List<Huis> huizen = huisService.findAll();
+        return ResponseEntity.ok(HuisMapper.toResponseDTOList(huizen));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<HuisResponseDTO> getHuisById(@PathVariable Long id) {
+        return huisService.findById(id)
+                .map(huis -> ResponseEntity.ok(HuisMapper.toResponseDTO(huis)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -45,17 +46,30 @@ public class HuisController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HuisResponseDTO> updateHuis(@PathVariable Long id, @RequestBody Huis huis){
+    public ResponseEntity<HuisResponseDTO> updateHuis(@PathVariable Long id, @RequestBody Huis huis) {
         var gevondenHuis = huisService.findById(id);
-        if(gevondenHuis.isPresent()){
+        if (gevondenHuis.isPresent()) {
             Huis dbHuis = gevondenHuis.get();
 
-            dbHuis.setAdres(huis.getAdres());
-            dbHuis.setPrijs(huis.getPrijs());
-            dbHuis.setAantalKamers(huis.getAantalKamers());
-            dbHuis.setEnergieLabel(huis.getEnergieLabel());
-            dbHuis.setFotos(huis.getFotos());
-            dbHuis.setOmschrijving(huis.getOmschrijving());
+            // Werk velden bij als ze aanwezig zijn
+            if (huis.getAdres() != null) {
+                dbHuis.setAdres(huis.getAdres());
+            }
+            if (huis.getPrijs() != 0) {
+                dbHuis.setPrijs(huis.getPrijs());
+            }
+            if (huis.getAantalKamers() != 0) {
+                dbHuis.setAantalKamers(huis.getAantalKamers());
+            }
+            if (huis.getEnergieLabel() != null) {
+                dbHuis.setEnergieLabel(huis.getEnergieLabel());
+            }
+            if (huis.getFotos() != null) {
+                dbHuis.setFotos(huis.getFotos());
+            }
+            if (huis.getOmschrijving() != null) {
+                dbHuis.setOmschrijving(huis.getOmschrijving());
+            }
 
             Huis updateHuis = huisService.save(dbHuis);
             return ResponseEntity.ok(HuisMapper.toResponseDTO(updateHuis));

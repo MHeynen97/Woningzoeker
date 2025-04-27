@@ -22,10 +22,11 @@ public class GebruikerController {
 
     @GetMapping
     public ResponseEntity<List<GebruikerResponseDto>> getGebruikersbyGebruikersnaam(@RequestParam(required = false) String gebruikersnaam){
-        return ResponseEntity.ok(GebruikerMapper.toResponseDTOList(gebruikerService.getGebruikers(gebruikersnaam)));
+        List<Gebruiker> gebruikers = gebruikerService.getGebruikers(gebruikersnaam);
+        return ResponseEntity.ok(GebruikerMapper.toResponseDTOList(gebruikers));
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<List<GebruikerResponseDto>> getGebruikers(@RequestParam(required = false) Long id){
         if (id == null) {
             var gebruikers = gebruikerService.findAll();

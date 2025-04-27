@@ -20,23 +20,34 @@ public class LocatieController {
         this.locatieService = locatieService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<LocatieResponseDTO>> GetLocatieByWoonplaats(@RequestParam(required = false) String woonplaats) {
-        List<Locatie> locaties = (woonplaats!=null) ? locatieService.findByWoonplaats(woonplaats) : locatieService.findAll();
+    @GetMapping()
+    public ResponseEntity<List<LocatieResponseDTO>> getLocatie() {
+        List<Locatie> locaties = locatieService.findAll();
         return ResponseEntity.ok(LocatieMapper.toResponseDTOList(locaties));
     }
 
-    @GetMapping
-    public ResponseEntity<List<LocatieResponseDTO>> getLocatie(@RequestParam(required = false) Long id){
-        if (id == null) {
-            var locaties = locatieService.findAll();
+    @GetMapping("/woonplaats")
+    public ResponseEntity<List<LocatieResponseDTO>> getLocatiesByWoonplaats(@RequestParam String woonplaats) {
+        if (woonplaats != null && !woonplaats.isEmpty()) {
+            List<Locatie> locaties = locatieService.findByWoonplaats(woonplaats);
+            if (locaties.isEmpty()) {
+                // Als er geen locaties gevonden zijn, geef een 404-status met een bericht
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(null);  // Je kunt een foutmelding toevoegen als je dat wilt in de body.
+            }
+            // Als er locaties zijn gevonden, geef ze terug
             return ResponseEntity.ok(LocatieMapper.toResponseDTOList(locaties));
-        } else {
-            return locatieService.findById(id)
-                    .map(b -> List.of(LocatieMapper.toResponseDTO(b)))
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
         }
+        // Als de woonplaats null of leeg is, geef een foutmelding
+        return ResponseEntity.badRequest().body(null);  // Of je zou een foutbericht kunnen toevoegen aan de body
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<LocatieResponseDTO> getLocatieById(@PathVariable Long id) {
+        return locatieService.findById(id)
+                .map(b -> ResponseEntity.ok(LocatieMapper.toResponseDTO(b)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping

@@ -4,11 +4,14 @@ import com.woningzoeker.woningzoeker.dtos.ContactInfoResponseDTO;
 import com.woningzoeker.woningzoeker.mappers.ContactInfoMapper;
 import com.woningzoeker.woningzoeker.models.ContactInfo;
 import com.woningzoeker.woningzoeker.services.ContactInfoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+// ToDo nadenken over logging toevoegen. Nice to have indien er tijd over is.
 
 @RestController
 @RequestMapping("/contactinfo")
@@ -39,21 +42,29 @@ public class ContactInfoController {
     }
 
     @PostMapping("/bulk")
-    public ResponseEntity<List<ContactInfoResponseDTO>> postContactData(@RequestBody List<ContactInfo> contactInfo){
-        List<ContactInfo> postContactData = contactInfoService.saveAll(contactInfo);
+    public ResponseEntity<List<ContactInfoResponseDTO>> postContactData(@Valid @RequestBody List<ContactInfo> contactInfos){
+        List<ContactInfo> postContactData = contactInfoService.saveAll(contactInfos);
         return ResponseEntity.status(HttpStatus.CREATED).body(ContactInfoMapper.toResponseDTOList(postContactData));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ContactInfoResponseDTO> updateContactInfo(@PathVariable Long id, @RequestBody ContactInfo contactInfo){
+    public ResponseEntity<ContactInfoResponseDTO> updateContactInfo(@PathVariable Long id, @RequestBody ContactInfo contactInfo) {
         var gevondenContactInfo = contactInfoService.findById(id);
-        if(gevondenContactInfo.isPresent()){
+        if (gevondenContactInfo.isPresent()) {
             ContactInfo dbContactInfo = gevondenContactInfo.get();
 
-            dbContactInfo.setEmail(contactInfo.getEmail());
-            dbContactInfo.setGebruikerId(contactInfo.getGebruikerId());
-            dbContactInfo.setProfielId(contactInfo.getProfielId());
-            dbContactInfo.setTelefoonnummer(contactInfo.getTelefoonnummer());
+            if (contactInfo.getEmail() != null) {
+                dbContactInfo.setEmail(contactInfo.getEmail());
+            }
+            if (contactInfo.getTelefoonnummer() != null) {
+                dbContactInfo.setTelefoonnummer(contactInfo.getTelefoonnummer());
+            }
+            if (contactInfo.getGebruikerId() != 0) {
+                dbContactInfo.setGebruikerId(contactInfo.getGebruikerId());
+            }
+            if (contactInfo.getProfielId() != 0) {
+                dbContactInfo.setProfielId(contactInfo.getProfielId());
+            }
 
             ContactInfo updateContactInfo = contactInfoService.save(dbContactInfo);
             return ResponseEntity.ok(ContactInfoMapper.toResponseDTO(updateContactInfo));
@@ -62,12 +73,12 @@ public class ContactInfoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ContactInfoResponseDTO> deleteContactInfo(@PathVariable Long id) {
+    public ResponseEntity<String> deleteContactInfo(@PathVariable Long id) {
         var result = contactInfoService.delete(id);
         if (result){
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contact info met ID " + id + " niet gevonden.");
         }
     }
 
