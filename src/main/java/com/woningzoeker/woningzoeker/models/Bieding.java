@@ -1,9 +1,13 @@
 package com.woningzoeker.woningzoeker.models;
 
+import com.woningzoeker.woningzoeker.Validaties.BodHogerDanPrijs;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import java.sql.Date;
 
+@BodHogerDanPrijs
 @Entity
 @Table(name = "Biedingen")
 public class Bieding {
@@ -12,12 +16,16 @@ public class Bieding {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
     private long huisId;
 
+    @Min(0)
     private int prijs;
 
+    @NotNull
     private long bieder; //gebruiker_id
 
+    @NotNull
     private long eigenaar; // gebruiker_id
 
     private Date eindDatum;
@@ -25,12 +33,13 @@ public class Bieding {
     private int bod;
 
     // constructor;
-    public Bieding(long huisId, int prijs, long bieder, long eigenaar, int bod){
+    public Bieding(long huisId, int prijs, long bieder, long eigenaar, int bod, Date eindDatum){
         this.huisId = huisId;
         this.prijs = prijs;
         this.bieder = bieder;
         this.eigenaar = eigenaar;
         this.bod = bod;
+        this.eindDatum = eindDatum;
     }
 
     public Bieding(){

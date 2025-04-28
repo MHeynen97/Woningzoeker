@@ -1,51 +1,62 @@
 package com.woningzoeker.woningzoeker.controllers;
 
+import com.woningzoeker.woningzoeker.dtos.BiedingResponseDTO;
+import com.woningzoeker.woningzoeker.mappers.BiedingMapper;
 import com.woningzoeker.woningzoeker.models.Bieding;
-import com.woningzoeker.woningzoeker.repositories.BiedingRepository;
+import com.woningzoeker.woningzoeker.services.BiedingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/Biedings")
+@RequestMapping("/biedingen")
 public class BiedingController {
 
-    private final BiedingRepository biedingRepository;
-    public BiedingController(BiedingRepository biedingRepository) {
-        this.biedingRepository = biedingRepository;
+    private final BiedingService biedingService;
+
+    public BiedingController(BiedingService biedingService) {
+        this.biedingService = biedingService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Bieding>> getBieding(@RequestParam(required = false) Long id){
-        //if else statement
-        List<Bieding> biedingen = biedingRepository.findByBiedingId(id);
-        return ResponseEntity.ok(biedingen);
+    public ResponseEntity<List<BiedingResponseDTO>> getBieding(@RequestParam(required = false) Long id){
+        if (id == null) {
+            var biedingen = biedingService.findAll();
+            return ResponseEntity.ok(BiedingMapper.toResponseDTOList(biedingen));
+        } else {
+            return biedingService.findById(id)
+                    .map(b -> List.of(BiedingMapper.toResponseDTO(b)))
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Bieding> getBiedingById(@PathVariable Long id) {
-        return biedingRepository.findById(id)
+    public ResponseEntity<BiedingResponseDTO> getBiedingById(@PathVariable Long id) {
+        return biedingService.findById(id)
+                .map(BiedingMapper::toResponseDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Bieding> postBieding(@RequestBody Bieding bieding){
-        Bieding opgeslagenBieding = biedingRepository.save(bieding);
-        return ResponseEntity.status(HttpStatus.CREATED).body(opgeslagenBieding);
+    public ResponseEntity<BiedingResponseDTO> postBieding(@RequestBody @Valid Bieding bieding){
+        Bieding opgeslagenBieding = biedingService.save(bieding);
+        return ResponseEntity.status(HttpStatus.CREATED).body(BiedingMapper.toResponseDTO(opgeslagenBieding));
     }
 
     @PostMapping("/bulk")
-    public ResponseEntity<List<Bieding>> postBiedingen(@RequestBody List<Bieding> biedingen) {
-        List<Bieding> opgeslagenBiedingen = biedingRepository.saveAll(biedingen);
-        return ResponseEntity.status(HttpStatus.CREATED).body(opgeslagenBiedingen);
+    public ResponseEntity<List<BiedingResponseDTO>> postBiedingen(@RequestBody List<Bieding> biedingen) {
+        List<Bieding> opgeslagenBiedingen = biedingService.saveAll(biedingen);
+        return ResponseEntity.status(HttpStatus.CREATED).body(BiedingMapper.toResponseDTOList(opgeslagenBiedingen));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Bieding> updateBieding(@PathVariable Long id, @RequestBody Bieding bieding){
-        var gevondenBieding = biedingRepository.findById(id);
+    public ResponseEntity<BiedingResponseDTO> updateBieding(@PathVariable Long id, @RequestBody Bieding bieding){
+        var gevondenBieding = biedingService.findById(id);
         if(gevondenBieding.isPresent()){
             Bieding dbBieding = gevondenBieding.get();
 
@@ -56,18 +67,20 @@ public class BiedingController {
             dbBieding.setEindDatum(bieding.getEindDatum());
             dbBieding.setHuisId(bieding.getHuisId());
 
-            biedingRepository.save(dbBieding);
-            return ResponseEntity.ok(dbBieding);
+            Bieding updateBieding = biedingService.save(dbBieding);
+            return ResponseEntity.ok(BiedingMapper.toResponseDTO(updateBieding));
         }
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Bieding> deleteBieding(@PathVariable Long id) {
-        if (biedingRepository.existsById(id)) {
-            biedingRepository.deleteById(id);
-            return ResponseEntity.noContent().build(); // 204: succesvol verwijderd, geen body
+    public ResponseEntity<Void> deleteBieding(@PathVariable Long id) {
+        var result = biedingService.delete(id);
+        if (result){
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build(); // 404: niet gevonden
+
     }
 }

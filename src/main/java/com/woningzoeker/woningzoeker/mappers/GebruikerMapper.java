@@ -16,7 +16,7 @@ public class GebruikerMapper {
         return responseDto;
     }
 
-    public static List<GebruikerResponseDto> ToResponseDTOList(List<Gebruiker> gebruikers) {
+    public static List<GebruikerResponseDto> toResponseDTOList(List<Gebruiker> gebruikers) {
         return gebruikers.stream().map(GebruikerMapper::toResponseDTO).collect(Collectors.toList());
     }
 }
