@@ -52,7 +52,6 @@ public class GebruikerController {
         if(gevondenGebruiker.isPresent()){
             Gebruiker dbGebruiker = gevondenGebruiker.get();
             dbGebruiker.setGebruikersnaam(gebruiker.getGebruikersnaam());
-            dbGebruiker.setEmail(gebruiker.getEmail());
             Gebruiker updateGebruiker = gebruikerService.save(dbGebruiker);
             return ResponseEntity.ok(GebruikerMapper.toResponseDTO(updateGebruiker));
         }

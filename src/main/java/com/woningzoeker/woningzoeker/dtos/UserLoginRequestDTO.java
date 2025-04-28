@@ -1,22 +1,20 @@
 package com.woningzoeker.woningzoeker.dtos;
 
 public class UserLoginRequestDTO {
-    private String userName;
-    private String password;
+    private String gebruikersnaam;
+    private String wachtwoord;
 
-    public String getUserName() {
-        return userName;
+    public String getGebruikersnaam() {
+        return gebruikersnaam;
+    }
+    public String getWachtwoord() {
+        return wachtwoord;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setGebruikersnaam(String gebruikersnaam) {
+        this.gebruikersnaam = gebruikersnaam;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setWachtwoord(String wachtwoord) {
+        this.wachtwoord = wachtwoord;
     }
 }

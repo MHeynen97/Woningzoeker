@@ -14,13 +14,18 @@ public class Gebruiker {
     private long id;
 
     private String gebruikersnaam;
+    private String wachtwoord;
+
+    private String rol;
 
     private String email;
 
+
     //constructor
-    public Gebruiker(String gebruikersnaam, String email) {
+    public Gebruiker(String gebruikersnaam, String wachtwoord, String rol) {
         this.gebruikersnaam = gebruikersnaam;
-        this.email = email;
+        this.wachtwoord = wachtwoord;
+        this.rol = rol;
     }
 
     public Gebruiker() {}
@@ -36,16 +41,21 @@ public class Gebruiker {
     public String getGebruikersnaam() {
         return gebruikersnaam;
     }
-
     public void setGebruikersnaam(String gebruikersnaam) {
         this.gebruikersnaam = gebruikersnaam;
     }
 
-    public String getEmail() {
-        return email;
+    public String getWachtwoord() {
+        return wachtwoord;
+    }
+    public void setWachtwoord(String wachtwoord) {
+        this.wachtwoord = wachtwoord;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getRol() {
+        return rol;
+    }
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 }

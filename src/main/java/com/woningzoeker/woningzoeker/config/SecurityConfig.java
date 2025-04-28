@@ -31,12 +31,28 @@ public class SecurityConfig {
                 .httpBasic(hp -> hp.disable()) //aanpassing
                 .authorizeHttpRequests(auth -> auth
                         // Publieke endpoints
+                        // Open endpoints
                         .requestMatchers("/api-docs/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/login").permitAll() //aanpassing
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/huizen/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/locaties/**").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/cars").hasAnyRole("USER")
-                        // Beveiligde endpoints: Alleen voor admins
-                        .requestMatchers("/cars/**").hasRole("ADMIN")
+                        // Gebruikers en Profielen en ContactInfo GET: toegankelijk voor USER of ADMIN
+                        .requestMatchers(HttpMethod.GET, "/gebruikers/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/profielen/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/contactinfo/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/biedingen/**").hasAnyRole("USER", "ADMIN")
+
+                        // Alleen gebruikers mogen zelf bieden
+                        .requestMatchers(HttpMethod.POST, "/biedingen/**").hasAnyRole("USER", "ADMIN")
+
+                        // Alles wat aanpassen of verwijderen is (PUT/DELETE) is alleen voor Admins
+                        .requestMatchers("/gebruikers/**").hasRole("ADMIN")
+                        .requestMatchers("/huizen/**").hasRole("ADMIN")
+                        .requestMatchers("/contactinfo/**").hasRole("ADMIN")
+                        .requestMatchers("/locaties/**").hasRole("ADMIN")
+                        .requestMatchers("/profielen/**").hasRole("ADMIN")
+                        .requestMatchers("/biedingen/**").hasRole("ADMIN")
 
                         // Andere verzoeken worden geweigerd
                         .anyRequest().denyAll()

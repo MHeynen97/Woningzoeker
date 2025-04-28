@@ -29,7 +29,7 @@ public class LoginController {
     public ResponseEntity<String> signIn(@RequestBody UserLoginRequestDTO userLoginRequestDTO
     ) {
         UsernamePasswordAuthenticationToken up =
-                new UsernamePasswordAuthenticationToken(userLoginRequestDTO.getUserName(), userLoginRequestDTO.getPassword());
+                new UsernamePasswordAuthenticationToken(userLoginRequestDTO.getGebruikersnaam(), userLoginRequestDTO.getWachtwoord());
 
         try {
             Authentication auth = authManager.authenticate(up);
@@ -39,7 +39,7 @@ public class LoginController {
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                    .body("Token generated");
+                    .body("Token generated: " + token);
         } catch (AuthenticationException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         }
