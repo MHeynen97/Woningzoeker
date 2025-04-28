@@ -18,7 +18,6 @@ public class Gebruiker {
 
     private String rol;
 
-    private String email;
 
 
     //constructor

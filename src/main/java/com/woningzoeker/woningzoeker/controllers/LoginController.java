@@ -41,6 +41,7 @@ public class LoginController {
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .body("Token generated: " + token);
         } catch (AuthenticationException ex) {
+            System.out.println(ex.getMessage());
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }

@@ -22,7 +22,7 @@ public class GebruikerController {
 
     @GetMapping
     public ResponseEntity<List<GebruikerResponseDto>> getGebruikers(@RequestParam(required = false) String gebruikersnaam){
-        return ResponseEntity.ok(GebruikerMapper.ToResponseDTOList(gebruikerService.getGebruikers(gebruikersnaam)));
+        return ResponseEntity.ok(GebruikerMapper.toResponseDTOList(gebruikerService.getGebruikers(gebruikersnaam)));
     }
 
     @GetMapping("/{id}")
@@ -43,7 +43,7 @@ public class GebruikerController {
     @PostMapping("/bulk")
     public ResponseEntity<List<GebruikerResponseDto>> postGebruikers(@RequestBody List<Gebruiker> gebruikers) {
         List<Gebruiker> opgeslagenGebruikers = gebruikerService.saveAll(gebruikers);
-        return ResponseEntity.status(HttpStatus.CREATED).body(GebruikerMapper.ToResponseDTOList(opgeslagenGebruikers));
+        return ResponseEntity.status(HttpStatus.CREATED).body(GebruikerMapper.toResponseDTOList(opgeslagenGebruikers));
     }
 
     @PutMapping("/{id}")
