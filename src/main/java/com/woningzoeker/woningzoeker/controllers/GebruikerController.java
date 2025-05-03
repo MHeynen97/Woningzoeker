@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/gebruikers")
+@RequestMapping("/gebruiker")
 public class GebruikerController {
 
     private final GebruikerService gebruikerService;
@@ -21,22 +21,17 @@ public class GebruikerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GebruikerResponseDto>> getGebruikersbyGebruikersnaam(@RequestParam(required = false) String gebruikersnaam){
-        List<Gebruiker> gebruikers = gebruikerService.getGebruikers(gebruikersnaam);
-        return ResponseEntity.ok(GebruikerMapper.toResponseDTOList(gebruikers));
+    public ResponseEntity<List<GebruikerResponseDto>> getGebruikers(@RequestParam(required = false) String gebruikersnaam){
+        return ResponseEntity.ok(GebruikerMapper.toResponseDTOList(gebruikerService.getGebruikers(gebruikersnaam)));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<GebruikerResponseDto>> getGebruikers(@RequestParam(required = false) Long id){
-        if (id == null) {
-            var gebruikers = gebruikerService.findAll();
-            return ResponseEntity.ok(GebruikerMapper.toResponseDTOList(gebruikers));
-        } else {
-            return gebruikerService.findById(id)
-                    .map(b -> List.of(GebruikerMapper.toResponseDTO(b)))
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
-        }
+
+    public ResponseEntity<GebruikerResponseDto> getGebruikerById(@PathVariable long id) {
+        return gebruikerService.findById(id)
+                .map(GebruikerMapper::toResponseDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -45,7 +40,6 @@ public class GebruikerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(GebruikerMapper.toResponseDTO(opgeslagenGebruiker));
     }
 
-    //ToDo check of gebruiker in list wel klopt op regel 52
     @PostMapping("/bulk")
     public ResponseEntity<List<GebruikerResponseDto>> postGebruikers(@RequestBody List<Gebruiker> gebruikers) {
         List<Gebruiker> opgeslagenGebruikers = gebruikerService.saveAll(gebruikers);
@@ -57,12 +51,8 @@ public class GebruikerController {
         var gevondenGebruiker = gebruikerService.findById(id);
         if(gevondenGebruiker.isPresent()){
             Gebruiker dbGebruiker = gevondenGebruiker.get();
-
             dbGebruiker.setGebruikersnaam(gebruiker.getGebruikersnaam());
-            dbGebruiker.setEmail(gebruiker.getEmail());
-
             Gebruiker updateGebruiker = gebruikerService.save(dbGebruiker);
-
             return ResponseEntity.ok(GebruikerMapper.toResponseDTO(updateGebruiker));
         }
         return ResponseEntity.notFound().build();
