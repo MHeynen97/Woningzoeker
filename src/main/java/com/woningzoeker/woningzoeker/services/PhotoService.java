@@ -5,6 +5,7 @@ import com.woningzoeker.woningzoeker.repositories.FileUploadRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +17,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
+@Service
 public class PhotoService {
+    private final Path rootLocation = Paths.get("upload-dir");
     private final Path fileStoragePath;
     private final String fileStorageLocation;
     private final FileUploadRepository repo;
@@ -43,21 +46,17 @@ public class PhotoService {
     }
 
     public Resource downLoadFile(String fileName) {
-
-        Path path = Paths.get(fileStorageLocation).toAbsolutePath().resolve(fileName);
-
-        Resource resource;
-
         try {
-            resource = new UrlResource(path.toUri());
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Issue in reading the file", e);
-        }
+            Path filePath = Paths.get("upload-dir").resolve(fileName).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
 
-        if(resource.exists()&& resource.isReadable()) {
-            return resource;
-        } else {
-            throw new RuntimeException("the file doesn't exist or not readable");
+            if (resource.exists()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Bestand niet gevonden: " + fileName);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Fout bij het ophalen van het bestand: " + fileName, e);
         }
     }
 }
