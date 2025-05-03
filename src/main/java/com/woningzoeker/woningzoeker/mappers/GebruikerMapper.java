@@ -11,7 +11,6 @@ public class GebruikerMapper {
         var responseDto = new GebruikerResponseDto();
         responseDto.setId(gebruiker.getId());
         responseDto.setGebruikersnaam(gebruiker.getGebruikersnaam());
-        responseDto.setEmail(gebruiker.getEmail());
 
         return responseDto;
     }
