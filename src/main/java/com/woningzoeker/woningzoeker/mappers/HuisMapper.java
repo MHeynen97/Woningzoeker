@@ -2,6 +2,7 @@ package com.woningzoeker.woningzoeker.mappers;
 
 import com.woningzoeker.woningzoeker.dtos.HuisResponseDTO;
 import com.woningzoeker.woningzoeker.models.Huis;
+import com.woningzoeker.woningzoeker.models.HuisFoto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,7 +13,12 @@ public class HuisMapper {
         responseDTO.setId(huis.getId());
         responseDTO.setAantalKamers(huis.getAantalKamers());
         responseDTO.setAdres(huis.getAdres());
-        responseDTO.setFotos(huis.getFotos());
+        responseDTO.setFotos(
+                huis.getHuisFoto()
+                        .stream()
+                        .map(HuisFoto::getFileName)
+                        .toList()
+        );
         responseDTO.setPrijs(huis.getPrijs());
         responseDTO.setEnergieLabel(huis.getEnergieLabel());
         responseDTO.setOmschrijving(huis.getOmschrijving());

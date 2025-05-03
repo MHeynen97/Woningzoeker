@@ -64,8 +64,8 @@ public class HuisController {
             if (huis.getEnergieLabel() != null) {
                 dbHuis.setEnergieLabel(huis.getEnergieLabel());
             }
-            if (huis.getFotos() != null) {
-                dbHuis.setFotos(huis.getFotos());
+            if (huis.getHuisFoto() != null) {
+                dbHuis.setHuisFoto(huis.getHuisFoto());
             }
             if (huis.getOmschrijving() != null) {
                 dbHuis.setOmschrijving(huis.getOmschrijving());

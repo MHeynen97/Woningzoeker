@@ -3,6 +3,8 @@ package com.woningzoeker.woningzoeker.models;
 import jakarta.persistence.*;
 
 import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name= "Huizen")
@@ -10,7 +12,7 @@ public class Huis {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private long id;
 
     private String adres; // verwijzing tussen deze en locatie
 
@@ -19,8 +21,6 @@ public class Huis {
     private int aantalKamers;
 
     private String energieLabel;
-
-    private String fotos; // juiste formaat? Upload en download optie.
 
     private String omschrijving;
 
@@ -32,13 +32,16 @@ public class Huis {
         Koop
     }
 
+    @OneToMany
+    @JoinColumn(name = "huis_id")
+    private List<HuisFoto> huisFotos = new ArrayList<>();
+
     //Constructor
-    public Huis(String adres,int prijs, int aantalKamers, String energieLabel, String fotos, String omschrijving, HuurKoop huurkoop){
+    public Huis(String adres,int prijs, int aantalKamers, String energieLabel, String omschrijving, HuurKoop huurkoop){
         this.adres = adres;
         this.prijs = prijs;
         this.aantalKamers = aantalKamers;
         this.energieLabel = energieLabel;
-        this.fotos = fotos;
         this.omschrijving = omschrijving;
         this.huurkoop = huurkoop;
     }
@@ -47,10 +50,10 @@ public class Huis {
 
     // getters en setters
     public long getId() {
-        return Id;
+        return id;
     }
     public void setId(long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getAdres() {
@@ -81,13 +84,6 @@ public class Huis {
         this.energieLabel = energieLabel;
     }
 
-    public String getFotos() {
-        return fotos;
-    }
-    public void setFotos(String fotos) {
-        this.fotos = fotos;
-    }
-
     public String getOmschrijving() {
         return omschrijving;
     }
@@ -100,5 +96,12 @@ public class Huis {
     }
     public void setHuurkoop(HuurKoop huurkoop) {
         this.huurkoop = huurkoop;
+    }
+
+    public List<HuisFoto> getHuisFoto() {
+        return huisFotos;
+    }
+    public void setHuisFoto(List<HuisFoto> huisFotos) {
+        this.huisFotos = huisFotos;
     }
 }

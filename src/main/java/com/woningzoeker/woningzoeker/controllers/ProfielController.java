@@ -1,11 +1,8 @@
 package com.woningzoeker.woningzoeker.controllers;
 
-import com.woningzoeker.woningzoeker.dtos.BiedingResponseDTO;
 import com.woningzoeker.woningzoeker.dtos.ProfielResponseDTO;
-import com.woningzoeker.woningzoeker.mappers.BiedingMapper;
 import com.woningzoeker.woningzoeker.mappers.ProfielMapper;
 import com.woningzoeker.woningzoeker.models.Profiel;
-import com.woningzoeker.woningzoeker.repositories.ProfielRepository;
 import com.woningzoeker.woningzoeker.services.ProfielService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

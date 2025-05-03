@@ -2,6 +2,8 @@ package com.woningzoeker.woningzoeker.dtos;
 
 import com.woningzoeker.woningzoeker.models.Huis;
 
+import java.util.List;
+
 public class HuisResponseDTO {
 
     private long Id;
@@ -9,7 +11,7 @@ public class HuisResponseDTO {
     private int prijs; //verwijzing tussen deze en bieding
     private int aantalKamers;
     private String energieLabel;
-    private String fotos; // juiste formaat? Upload en download optie.
+    private List<String> fotos; // juiste formaat? Upload en download optie.
     private String omschrijving;
     private Huis.HuurKoop huurkoop;
 
@@ -29,7 +31,7 @@ public class HuisResponseDTO {
     public String getEnergieLabel() {
         return energieLabel;
     }
-    public String getFotos() {
+    public List<String> getFotos() {
         return fotos;
     }
     public String getOmschrijving() {
@@ -56,7 +58,7 @@ public class HuisResponseDTO {
     public void setEnergieLabel(String energieLabel) {
         this.energieLabel = energieLabel;
     }
-    public void setFotos(String fotos) {
+    public void setFotos(List<String> fotos) {
         this.fotos = fotos;
     }
     public void setOmschrijving(String omschrijving) {

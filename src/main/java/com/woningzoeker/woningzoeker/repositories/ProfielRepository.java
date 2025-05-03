@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProfielRepository extends JpaRepository<Profiel, Long> {
     List<Profiel> findByGebruikersnaam(String gebruikersnaam);
-    List<Profiel> findByFavorieteHuizen(String favorieteHuizen);
+    List<Profiel> findByFavorieteHuizen(int favorieteHuizen);
     List<Profiel> findByInkomendeBerichten(String inkomendeBerichten);
     List<Profiel> findByUitgaandeBerichten(String uitgaandeBerichten);
 }
