@@ -68,7 +68,6 @@ public class HuisController {
         Huis huis = huisService.assignPhotoToHuis(fileName, id);
 
         return ResponseEntity.created(URI.create(url)).body(HuisMapper.toResponseDTO(huis));
-
     }
 
     @PutMapping("/{id}")
