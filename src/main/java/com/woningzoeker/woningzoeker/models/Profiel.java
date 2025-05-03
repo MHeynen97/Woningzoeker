@@ -3,6 +3,7 @@ package com.woningzoeker.woningzoeker.models;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name= "profielen")
@@ -10,21 +11,24 @@ public class Profiel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
-    private String gebruikersnaam; // linken aan gebruiker
+    private long id;
     private String naam;
     private Date geboortedatum;
     private String woonplaats;
     private String email; // linken aan contactInfo
     private String telefoonnummer; // linken aan contactInfo
     private String omschrijving;
-    private int favorieteHuizen; //linken aan huisId.
+    @ManyToMany
+    private List<Huis> favorieteHuizen; //linken aan huisid.
     private String inkomendeBerichten;
     private String uitgaandeBerichten;
 
+    @OneToOne
+    @JoinColumn(name = "gebruiker_id")
+    Gebruiker gebruiker;
+
     //Constructor
-    public Profiel(String gebruikersnaam, String naam, Date geboortedatum, String woonplaats, String email, String telefoonnummer,String omschrijving, int favorieteHuizen, String inkomendeBerichten, String uitgaandeBerichten){
-        this.gebruikersnaam = gebruikersnaam;
+    public Profiel(String naam, Date geboortedatum, String woonplaats, String email, String telefoonnummer,String omschrijving, List<Huis> favorieteHuizen, String inkomendeBerichten, String uitgaandeBerichten){
         this.naam = naam;
         this.geboortedatum = geboortedatum;
         this.woonplaats = woonplaats;
@@ -40,17 +44,10 @@ public class Profiel {
 
     //getters en setters
     public long getId() {
-        return Id;
+        return id;
     }
     public void setId(long id) {
-        Id = id;
-    }
-
-    public String getGebruikersnaam() {
-        return gebruikersnaam;
-    }
-    public void setGebruikersnaam(String gebruikersnaam) {
-        this.gebruikersnaam = gebruikersnaam;
+        this.id = id;
     }
 
     public String getNaam() {
@@ -95,10 +92,10 @@ public class Profiel {
         this.omschrijving = omschrijving;
     }
 
-    public int getFavorieteHuizen() {
+    public List<Huis> getFavorieteHuizen() {
         return favorieteHuizen;
     }
-    public void setFavorieteHuizen(int favorieteHuizen) {
+    public void setFavorieteHuizen(List<Huis> favorieteHuizen) {
         this.favorieteHuizen = favorieteHuizen;
     }
 
@@ -106,13 +103,21 @@ public class Profiel {
         return inkomendeBerichten;
     }
     public void setInkomendeBerichten(String inkomendeBerichten){
-        this.inkomendeBerichten = this.inkomendeBerichten;
+        this.inkomendeBerichten = inkomendeBerichten;
     }
 
     public String getUitgaandeBerichten() {
         return uitgaandeBerichten;
     }
     public void setUitgaandeBerichten(String uitgaandeBerichten){
-        this.uitgaandeBerichten = this.uitgaandeBerichten;
+        this.uitgaandeBerichten = uitgaandeBerichten;
+    }
+
+    public Gebruiker getGebruiker(){
+        return gebruiker;
+    }
+
+    public void setGebruiker(Gebruiker gebruiker) {
+        this.gebruiker = gebruiker;
     }
 }
