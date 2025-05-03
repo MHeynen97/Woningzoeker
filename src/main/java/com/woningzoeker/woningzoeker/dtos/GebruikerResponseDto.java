@@ -5,7 +5,8 @@ public class GebruikerResponseDto {
 
     private Long id;
     private String gebruikersnaam;
-    private String email;
+    private String wachtwoord;
+    private String rol;
 
 
     // getters
@@ -15,8 +16,11 @@ public class GebruikerResponseDto {
     public String getGebruikersnaam() {
         return gebruikersnaam;
     }
-    public String getEmail() {
-        return email;
+    public String getWachtwoord() {
+        return wachtwoord;
+    }
+    public String getRol() {
+        return rol;
     }
 
     // setters
@@ -26,7 +30,10 @@ public class GebruikerResponseDto {
     public void setGebruikersnaam(String gebruikersnaam) {
         this.gebruikersnaam = gebruikersnaam;
     }
-    public void setEmail(String email) {
-        this.email = email;
+    public void setWachtwoord(String wachtwoord) {
+        this.wachtwoord = wachtwoord;
+    }
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 }

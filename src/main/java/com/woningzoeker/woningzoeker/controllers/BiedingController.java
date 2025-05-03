@@ -12,7 +12,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/biedingen")
+@RequestMapping("/bieding")
 public class BiedingController {
 
     private final BiedingService biedingService;
