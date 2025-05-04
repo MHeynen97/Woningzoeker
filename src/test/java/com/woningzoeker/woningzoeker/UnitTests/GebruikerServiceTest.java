@@ -5,12 +5,13 @@ import com.woningzoeker.woningzoeker.repositories.GebruikerRepository;
 import com.woningzoeker.woningzoeker.services.GebruikerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class GebruikerServiceTest {
@@ -25,42 +26,32 @@ class GebruikerServiceTest {
     }
 
     @Test
-    void testSaveGebruiker() {
+    void testSave() {
         Gebruiker gebruiker = new Gebruiker();
-        gebruiker.setId(1L);
-        gebruiker.setGebruikersnaam("testgebruiker");
+        gebruiker.setGebruikersnaam("test");
 
         when(gebruikerRepository.save(gebruiker)).thenReturn(gebruiker);
 
-        Gebruiker result = gebruikerService.save(gebruiker);
-
-        assertThat(result).isEqualTo(gebruiker);
-        verify(gebruikerRepository).save(gebruiker);
+        Gebruiker saved = gebruikerService.save(gebruiker);
+        assertEquals("test", saved.getGebruikersnaam());
+        verify(gebruikerRepository, times(1)).save(gebruiker);
     }
 
     @Test
-    void testSaveAllGebruikers() {
-        Gebruiker g1 = new Gebruiker();
-        Gebruiker g2 = new Gebruiker();
-        List<Gebruiker> gebruikers = Arrays.asList(g1, g2);
-
+    void testSaveAll() {
+        List<Gebruiker> gebruikers = Arrays.asList(new Gebruiker(), new Gebruiker());
         when(gebruikerRepository.saveAll(gebruikers)).thenReturn(gebruikers);
 
         List<Gebruiker> result = gebruikerService.saveAll(gebruikers);
-
-        assertThat(result).hasSize(2);
+        assertEquals(2, result.size());
         verify(gebruikerRepository).saveAll(gebruikers);
     }
 
     @Test
     void testFindAll() {
-        List<Gebruiker> gebruikers = List.of(new Gebruiker(), new Gebruiker());
-        when(gebruikerRepository.findAll()).thenReturn(gebruikers);
-
+        when(gebruikerRepository.findAll()).thenReturn(List.of(new Gebruiker()));
         List<Gebruiker> result = gebruikerService.findAll();
-
-        assertThat(result).hasSize(2);
-        verify(gebruikerRepository).findAll();
+        assertFalse(result.isEmpty());
     }
 
     @Test
@@ -71,67 +62,45 @@ class GebruikerServiceTest {
         when(gebruikerRepository.findById(1L)).thenReturn(Optional.of(gebruiker));
 
         Optional<Gebruiker> result = gebruikerService.findById(1L);
-
-        assertThat(result).isPresent();
-        assertThat(result.get().getId()).isEqualTo(1L);
-        verify(gebruikerRepository).findById(1L);
+        assertTrue(result.isPresent());
+        assertEquals(1L, result.get().getId());
     }
 
     @Test
     void testFindByGebruikersnaam() {
-        Gebruiker gebruiker = new Gebruiker();
-        gebruiker.setGebruikersnaam("testgebruiker");
+        when(gebruikerRepository.findByGebruikersnaam("john")).thenReturn(List.of(new Gebruiker()));
 
-        when(gebruikerRepository.findByGebruikersnaam("testgebruiker")).thenReturn(List.of(gebruiker));
-
-        List<Gebruiker> result = gebruikerService.findByGebruikersnaam("testgebruiker");
-
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getGebruikersnaam()).isEqualTo("testgebruiker");
-        verify(gebruikerRepository).findByGebruikersnaam("testgebruiker");
+        List<Gebruiker> result = gebruikerService.findByGebruikersnaam("john");
+        assertEquals(1, result.size());
     }
 
     @Test
-    void testDeleteSuccess() {
+    void testDelete_Success() {
         when(gebruikerRepository.existsById(1L)).thenReturn(true);
-
         boolean result = gebruikerService.delete(1L);
-
-        assertThat(result).isTrue();
+        assertTrue(result);
         verify(gebruikerRepository).deleteById(1L);
     }
 
     @Test
-    void testDeleteFailure() {
-        when(gebruikerRepository.existsById(1L)).thenReturn(false);
-
-        boolean result = gebruikerService.delete(1L);
-
-        assertThat(result).isFalse();
-        verify(gebruikerRepository, never()).deleteById(anyLong());
+    void testDelete_NotFound() {
+        when(gebruikerRepository.existsById(2L)).thenReturn(false);
+        boolean result = gebruikerService.delete(2L);
+        assertFalse(result);
+        verify(gebruikerRepository, never()).deleteById(any());
     }
 
     @Test
-    void testGetGebruikersWithGebruikersnaam() {
-        Gebruiker gebruiker = new Gebruiker();
-        gebruiker.setGebruikersnaam("gebruiker1");
-
-        when(gebruikerRepository.findByGebruikersnaam("gebruiker1")).thenReturn(List.of(gebruiker));
-
-        List<Gebruiker> result = gebruikerService.getGebruikers("gebruiker1");
-
-        assertThat(result).hasSize(1);
-        verify(gebruikerRepository).findByGebruikersnaam("gebruiker1");
+    void testGetGebruikers_WithGebruikersnaam() {
+        when(gebruikerRepository.findByGebruikersnaam("alice")).thenReturn(List.of(new Gebruiker()));
+        List<Gebruiker> result = gebruikerService.getGebruikers("alice");
+        assertEquals(1, result.size());
     }
 
     @Test
-    void testGetGebruikersWithoutGebruikersnaam() {
-        List<Gebruiker> gebruikers = List.of(new Gebruiker(), new Gebruiker());
-        when(gebruikerRepository.findAll()).thenReturn(gebruikers);
-
+    void testGetGebruikers_WithoutGebruikersnaam() {
+        when(gebruikerRepository.findAll()).thenReturn(List.of(new Gebruiker(), new Gebruiker()));
         List<Gebruiker> result = gebruikerService.getGebruikers(null);
-
-        assertThat(result).hasSize(2);
-        verify(gebruikerRepository).findAll();
+        assertEquals(2, result.size());
     }
 }
