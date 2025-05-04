@@ -48,12 +48,6 @@ public class HuisController {
         return ResponseEntity.status(HttpStatus.CREATED).body(HuisMapper.toResponseDTO(opgeslagenHuis));
     }
 
-    @PostMapping("/bulk")
-    public ResponseEntity<List<HuisResponseDTO>> postHuizen(@RequestBody List<Huis> huis){
-        List<Huis> opgeslagenHuizen = huisService.saveAll(huis);
-        return ResponseEntity.status(HttpStatus.CREATED).body(HuisMapper.toResponseDTOList(opgeslagenHuizen));
-    }
-
     @PostMapping("/{id}")
     public ResponseEntity<HuisResponseDTO> addPhotoToHuis(@PathVariable("id") Long id,
                                                      @RequestBody MultipartFile file)

@@ -49,13 +49,6 @@ public class ContactInfoController {
         ContactInfo opgeslagenContactInfo = contactInfoService.save(contactInfo);
         return ResponseEntity.status(HttpStatus.CREATED).body(ContactInfoMapper.toResponseDTO(opgeslagenContactInfo));
     }
-
-    @PostMapping("/bulk")
-    public ResponseEntity<List<ContactInfoResponseDTO>> postContactData(@Valid @RequestBody List<ContactInfo> contactInfos){
-        List<ContactInfo> postContactData = contactInfoService.saveAll(contactInfos);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ContactInfoMapper.toResponseDTOList(postContactData));
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<ContactInfoResponseDTO> updateContactInfo(@PathVariable Long id, @RequestBody ContactInfo contactInfo) {
         var gevondenContactInfo = contactInfoService.findById(id);

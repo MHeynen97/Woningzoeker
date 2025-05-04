@@ -3,6 +3,7 @@ package com.woningzoeker.woningzoeker.services;
 import com.woningzoeker.woningzoeker.dtos.BerichtResponseDTO;
 import com.woningzoeker.woningzoeker.mappers.BerichtMapper;
 import com.woningzoeker.woningzoeker.models.Bericht;
+import com.woningzoeker.woningzoeker.models.Bieding;
 import com.woningzoeker.woningzoeker.models.Gebruiker;
 import com.woningzoeker.woningzoeker.repositories.BerichtRepository;
 import com.woningzoeker.woningzoeker.repositories.GebruikerRepository;
@@ -23,32 +24,21 @@ public class BerichtService {
         this.gebruikerRepository = gebruikerRepository;
     }
 
-    public BerichtResponseDTO verzendBericht(BerichtResponseDTO dto) {
-        Bericht bericht = BerichtMapper.toEntity(dto);
-        Gebruiker afzender = gebruikerRepository.findById(dto.getAfzenderId())
-                .orElseThrow(() -> new RuntimeException("Afzender niet gevonden"));
-        Gebruiker ontvanger = gebruikerRepository.findById(dto.getOntvangerId())
-                .orElseThrow(() -> new RuntimeException("Ontvanger niet gevonden"));
-
-        bericht.setAfzender(afzender);
-        bericht.setOntvanger(ontvanger);
-        bericht.setVerzondenOp(LocalDateTime.now());
-
-        Bericht opgeslagen = berichtRepository.save(bericht);
-        return BerichtMapper.toDTO(opgeslagen);
-    }
 
     public List<BerichtResponseDTO> getInkomendeBerichten(Long gebruikerId) {
         return berichtRepository.findByOntvangerId(gebruikerId)
                 .stream()
-                .map(BerichtMapper::toDTO)
+                .map(BerichtMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
     public List<BerichtResponseDTO> getUitgaandeBerichten(Long gebruikerId) {
         return berichtRepository.findByAfzenderId(gebruikerId)
                 .stream()
-                .map(BerichtMapper::toDTO)
+                .map(BerichtMapper::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Bericht save(Bericht bericht) { return berichtRepository.save(bericht);
     }
 }

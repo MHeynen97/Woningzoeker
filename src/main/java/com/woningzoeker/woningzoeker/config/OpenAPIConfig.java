@@ -33,14 +33,14 @@ public class OpenAPIConfig {
         prodServer.setDescription("Server URL in Production environment");
 
         Contact contact = new Contact();
-        contact.setEmail("docent@novi-education.nl");
-        contact.setName("D. Ocent");
-        contact.setUrl("https://www.novi.nl");
+        contact.setEmail("merel.heynen@novi-education.nl");
+        contact.setName("merel heynen");
+        contact.setUrl("https://www.google.nl");
 
         License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
 
         Info info = new Info()
-                .title("cars demo")
+                .title("Woningzoeker")
                 .version("1.0")
                 .contact(contact)
                 .description("This API exposes endpoints")

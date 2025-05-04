@@ -1,7 +1,11 @@
 package com.woningzoeker.woningzoeker.controllers;
 
 import com.woningzoeker.woningzoeker.dtos.BerichtResponseDTO;
+import com.woningzoeker.woningzoeker.mappers.BerichtMapper;
+import com.woningzoeker.woningzoeker.mappers.BiedingMapper;
+import com.woningzoeker.woningzoeker.models.Bericht;
 import com.woningzoeker.woningzoeker.services.BerichtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +22,9 @@ public class BerichtController {
     }
 
     @PostMapping
-    public ResponseEntity<BerichtResponseDTO> verzendBericht(@RequestBody BerichtResponseDTO dto) {
-        BerichtResponseDTO response = berichtService.verzendBericht(dto);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<BerichtResponseDTO> verzendBericht(@RequestBody Bericht bericht) {
+        Bericht opgeslagenBericht = berichtService.save(bericht);
+        return ResponseEntity.status(HttpStatus.CREATED).body(BerichtMapper.toResponseDTO(opgeslagenBericht));
     }
 
     @GetMapping("/ontvangen/{gebruikerId}")

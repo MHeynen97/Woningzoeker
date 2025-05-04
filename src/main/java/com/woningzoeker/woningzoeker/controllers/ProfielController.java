@@ -43,12 +43,6 @@ public class ProfielController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ProfielMapper.toResponseDTO(opgeslagenProfiel));
     }
 
-    @PostMapping("/bulk")
-    public ResponseEntity<List<ProfielResponseDTO>> postProfiel(@RequestBody List<Profiel> profiel){
-        List<Profiel> opgeslagenProfielen = profielService.saveAll(profiel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ProfielMapper.toResponseDTOList(opgeslagenProfielen));
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<ProfielResponseDTO> updateProfiel(@PathVariable Long id, @RequestBody Profiel profiel){
         var gevondenProfiel = profielService.findById(id);

@@ -38,27 +38,11 @@ public class BiedingController {
         }
     }
 
-    // Haalt bieding op door het ID van de bieding
-    @GetMapping("/{id}")
-    public ResponseEntity<BiedingResponseDTO> getBiedingById(@PathVariable Long id) {
-        return biedingService.findById(id)
-                .map(BiedingMapper::toResponseDTO)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
     // Creëert een nieuwe bieding
     @PostMapping
     public ResponseEntity<BiedingResponseDTO> postBieding(@RequestBody @Valid Bieding bieding) {
         Bieding opgeslagenBieding = biedingService.save(bieding);
         return ResponseEntity.status(HttpStatus.CREATED).body(BiedingMapper.toResponseDTO(opgeslagenBieding));
-    }
-
-    // Creëert meerdere biedingen
-    @PostMapping("/bulk")
-    public ResponseEntity<List<BiedingResponseDTO>> postBiedingen(@RequestBody List<@Valid Bieding> biedingen) {
-        List<Bieding> opgeslagenBiedingen = biedingService.saveAll(biedingen);
-        return ResponseEntity.status(HttpStatus.CREATED).body(BiedingMapper.toResponseDTOList(opgeslagenBiedingen));
     }
 
     // Update een bieding

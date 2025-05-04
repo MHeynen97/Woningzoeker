@@ -1,4 +1,4 @@
-INSERT INTO gebruikers (id, gebruikersnaam, wachtwoord, rol) VALUES (1, 'Birdy', '$2a$10$miof.b3tCEho.w8BklRVG.1Lr0g/xd5sEDzA7QYPuyZu.Q/UwHNzy', 'USER');
+INSERT INTO gebruikers (id, gebruikersnaam, wachtwoord, rol) VALUES (1, 'Birdy', '$2a$10$04/2Vjpr0UySTD3fC/BDqezdNkhAiREFZYBuz9itIp9RomglzqYMa', 'USER');
 INSERT INTO gebruikers (id, gebruikersnaam, wachtwoord, rol) VALUES (2, 'mheynen', '$2a$10$JvFDc5Mhs76JHfSpq7WPYOgYnHk8nMdAogdlk466XYaMj.pEM0PWC', 'ADMIN');
 
 -- Locaties
