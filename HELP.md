@@ -1,3 +1,4 @@
+
 # API Documentatie – Woningzoeker Endpoints
 
 ## Authenticatie
