@@ -14,31 +14,34 @@ public class Profiel {
     private long id;
     private String naam;
     private Date geboortedatum;
-    private String woonplaats;
-    private String email; // linken aan contactInfo
-    private String telefoonnummer; // linken aan contactInfo
+
+    @OneToOne
+    @JoinColumn(name = "locatie_id")
+    private Locatie locatie;
+
+    @OneToOne(mappedBy = "profiel", cascade = CascadeType.ALL)
+    private ContactInfo contactInfo;
+
     private String omschrijving;
+
     @ManyToMany
     private List<Huis> favorieteHuizen; //linken aan huisid.
-    private String inkomendeBerichten;
-    private String uitgaandeBerichten;
 
     @OneToOne
     @JoinColumn(name = "gebruiker_id")
     Gebruiker gebruiker;
 
     //Constructor
-    public Profiel(String naam, Date geboortedatum, String woonplaats, String email, String telefoonnummer,String omschrijving, List<Huis> favorieteHuizen, String inkomendeBerichten, String uitgaandeBerichten){
+    public Profiel(String naam, Date geboortedatum, String omschrijving, Locatie locatie, ContactInfo contactInfo, List<Huis> favorieteHuizen, Gebruiker gebruiker) {
         this.naam = naam;
         this.geboortedatum = geboortedatum;
-        this.woonplaats = woonplaats;
-        this.email = email;
-        this.telefoonnummer = telefoonnummer;
         this.omschrijving = omschrijving;
+        this.locatie = locatie;
+        this.contactInfo = contactInfo;
         this.favorieteHuizen = favorieteHuizen;
-        this.inkomendeBerichten = inkomendeBerichten;
-        this.uitgaandeBerichten = uitgaandeBerichten;
+        this.gebruiker = gebruiker;
     }
+
     public Profiel() {
     }
 
@@ -64,26 +67,11 @@ public class Profiel {
         this.geboortedatum = geboortedatum;
     }
 
-    public String getWoonplaats() {
-        return woonplaats;
-    }
-    public void setWoonplaats(String woonplaats) {
-        this.woonplaats = woonplaats;
-    }
+    public Locatie getLocatie() { return locatie; }
+    public void setLocatie(Locatie locatie) { this.locatie = locatie; }
 
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefoonnummer() {
-        return telefoonnummer;
-    }
-    public void setTelefoonnummer(String telefoonnummer) {
-        this.telefoonnummer = telefoonnummer;
-    }
+    public ContactInfo getContactInfo() { return contactInfo; }
+    public void setContactInfo(ContactInfo contactInfo) { this.contactInfo = contactInfo; }
 
     public String getOmschrijving() {
         return omschrijving;
@@ -99,24 +87,9 @@ public class Profiel {
         this.favorieteHuizen = favorieteHuizen;
     }
 
-    public String getInkomendeBerichten() {
-        return inkomendeBerichten;
-    }
-    public void setInkomendeBerichten(String inkomendeBerichten){
-        this.inkomendeBerichten = inkomendeBerichten;
-    }
-
-    public String getUitgaandeBerichten() {
-        return uitgaandeBerichten;
-    }
-    public void setUitgaandeBerichten(String uitgaandeBerichten){
-        this.uitgaandeBerichten = uitgaandeBerichten;
-    }
-
     public Gebruiker getGebruiker(){
         return gebruiker;
     }
-
     public void setGebruiker(Gebruiker gebruiker) {
         this.gebruiker = gebruiker;
     }

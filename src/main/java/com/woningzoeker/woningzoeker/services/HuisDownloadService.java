@@ -5,6 +5,7 @@ import com.woningzoeker.woningzoeker.exceptions.RecordNotFoundException;
 import com.woningzoeker.woningzoeker.models.Huis;
 import com.woningzoeker.woningzoeker.models.HuisFoto;
 import com.woningzoeker.woningzoeker.repositories.HuisRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -39,7 +40,7 @@ public class HuisDownloadService {
     }
 
     private List<Resource> getPhotoResources(Huis huis) {
-        List<HuisFoto> fotos = huis.getHuisFoto();
+        List<HuisFoto> fotos = huis.getHuisFotos();
         if (fotos == null || fotos.isEmpty()) {
             throw new RecordNotFoundException("Huis met id: " + huis.getId() + " heeft geen fotos");
         }

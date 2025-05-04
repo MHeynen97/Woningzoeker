@@ -55,15 +55,29 @@ public class ProfielController {
         if(gevondenProfiel.isPresent()){
             Profiel dbProfiel = gevondenProfiel.get();
 
-            dbProfiel.setGebruikersnaam(profiel.getGebruikersnaam());
             dbProfiel.setNaam(profiel.getNaam());
             dbProfiel.setGeboortedatum(profiel.getGeboortedatum());
-            dbProfiel.setEmail(profiel.getEmail());
-            dbProfiel.setTelefoonnummer(profiel.getTelefoonnummer());
             dbProfiel.setOmschrijving(profiel.getOmschrijving());
+
             dbProfiel.setFavorieteHuizen(profiel.getFavorieteHuizen());
-            dbProfiel.setInkomendeBerichten(profiel.getInkomendeBerichten());
-            dbProfiel.setUitgaandeBerichten(profiel.getUitgaandeBerichten());
+            // ContactInfo bijwerken
+            if (profiel.getContactInfo() != null) {
+                if (dbProfiel.getContactInfo() == null) {
+                    dbProfiel.setContactInfo(profiel.getContactInfo());
+                } else {
+                    dbProfiel.getContactInfo().setEmail(profiel.getContactInfo().getEmail());
+                    dbProfiel.getContactInfo().setTelefoonnummer(profiel.getContactInfo().getTelefoonnummer());
+                }
+            }
+
+            // Locatie bijwerken
+            if (profiel.getLocatie() != null) {
+                if (dbProfiel.getLocatie() == null) {
+                    dbProfiel.setLocatie(profiel.getLocatie());
+                } else {
+                    dbProfiel.getLocatie().setWoonplaats(profiel.getLocatie().getWoonplaats());
+                }
+            }
 
             Profiel updateProfiel = profielService.save(dbProfiel);
 

@@ -77,8 +77,8 @@ public class HuisController {
             Huis dbHuis = gevondenHuis.get();
 
             // Werk velden bij als ze aanwezig zijn
-            if (huis.getAdres() != null) {
-                dbHuis.setAdres(huis.getAdres());
+            if (huis.getLocatie() != null) {
+                dbHuis.setLocatie(huis.getLocatie());
             }
             if (huis.getPrijs() != 0) {
                 dbHuis.setPrijs(huis.getPrijs());
@@ -89,8 +89,8 @@ public class HuisController {
             if (huis.getEnergieLabel() != null) {
                 dbHuis.setEnergieLabel(huis.getEnergieLabel());
             }
-            if (huis.getHuisFoto() != null) {
-                dbHuis.setHuisFoto(huis.getHuisFoto());
+            if (huis.getHuisFotos() != null) {
+                dbHuis.setHuisFotos(huis.getHuisFotos());
             }
             if (huis.getOmschrijving() != null) {
                 dbHuis.setOmschrijving(huis.getOmschrijving());

@@ -2,8 +2,10 @@ package com.woningzoeker.woningzoeker.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
-@Table(name = "Gebruikers")
+@Table(name = "gebruikers")
 public class Gebruiker {
 
 
@@ -12,13 +14,15 @@ public class Gebruiker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String gebruikersnaam;
     private String wachtwoord;
-
     private String rol;
 
+    @OneToMany(mappedBy = "afzender", cascade = CascadeType.ALL)
+    private List<Bericht> uitgaandeBerichten;
 
+    @OneToMany(mappedBy = "ontvanger", cascade = CascadeType.ALL)
+    private List<Bericht> inkomendeBerichten;
 
     //constructor
     public Gebruiker(String gebruikersnaam, String wachtwoord, String rol) {

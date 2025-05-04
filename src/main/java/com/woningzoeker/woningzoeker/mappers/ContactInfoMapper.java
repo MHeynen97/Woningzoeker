@@ -11,9 +11,8 @@ public class ContactInfoMapper {
         ContactInfoResponseDTO responseDTO = new ContactInfoResponseDTO();
         responseDTO.setId(contactInfo.getId());
         responseDTO.setEmail(contactInfo.getEmail());
-        responseDTO.setGebruikerId(contactInfo.getGebruikerId());
-        responseDTO.setProfielId(contactInfo.getProfielId());
-        responseDTO.setTelefoonnummer(responseDTO.getTelefoonnummer());
+        responseDTO.setProfielId(contactInfo.getProfiel().getId());
+        responseDTO.setTelefoonnummer(contactInfo.getTelefoonnummer());
 
         return responseDTO;
     }

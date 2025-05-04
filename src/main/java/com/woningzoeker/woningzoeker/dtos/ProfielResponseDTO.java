@@ -1,6 +1,9 @@
 package com.woningzoeker.woningzoeker.dtos;
 
+import com.woningzoeker.woningzoeker.models.Huis;
+
 import java.sql.Date;
+import java.util.List;
 
 public class ProfielResponseDTO {
 
@@ -12,9 +15,7 @@ public class ProfielResponseDTO {
     private String email; // linken aan contactInfo
     private String telefoonnummer; // linken aan contactInfo
     private String omschrijving;
-    private int favorieteHuizen; //linken aan huisId.
-    private String inkomendeBerichten;
-    private String uitgaandeBerichten;
+    private List<Huis> favorieteHuizen;
 
     //getters
     public long getId() {
@@ -41,15 +42,10 @@ public class ProfielResponseDTO {
     public String getOmschrijving() {
         return omschrijving;
     }
-    public int getFavorieteHuizen() {
+    public List<Huis> getFavorieteHuizen() {
         return favorieteHuizen;
     }
-    public String getInkomendeBerichten() {
-        return inkomendeBerichten;
-    }
-    public String getUitgaandeBerichten() {
-        return uitgaandeBerichten;
-    }
+
 
     // setters
     public void setId(long id) {
@@ -76,13 +72,7 @@ public class ProfielResponseDTO {
     public void setOmschrijving(String omschrijving) {
         this.omschrijving = omschrijving;
     }
-    public void setFavorieteHuizen(int favorieteHuizen) {
+    public void setFavorieteHuizen(List<Huis> favorieteHuizen) {
         this.favorieteHuizen = favorieteHuizen;
-    }
-    public void setInkomendeBerichten(String inkomendeBerichten) {
-        this.inkomendeBerichten = inkomendeBerichten;
-    }
-    public void setUitgaandeBerichten(String uitgaandeBerichten) {
-        this.uitgaandeBerichten = uitgaandeBerichten;
     }
 }

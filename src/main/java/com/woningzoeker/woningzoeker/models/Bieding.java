@@ -1,40 +1,36 @@
 package com.woningzoeker.woningzoeker.models;
 
-import com.woningzoeker.woningzoeker.Validaties.BodHogerDanPrijs;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-
 import java.sql.Date;
 
-@BodHogerDanPrijs
 @Entity
-@Table(name = "Biedingen")
+@Table(name = "biedingen")
 public class Bieding {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
-    private long huisId;
+    @ManyToOne // Verbinding naar het Huis
+    @JoinColumn(name = "huis_id", nullable = false)
+    private Huis huis; // Verander dit naar een Huis object in plaats van huisId
 
-    @Min(0)
     private int prijs;
 
-    @NotNull
-    private long bieder; //gebruiker_id
+    @ManyToOne // Verbindt de Bieder en Eigenaar als Gebruikers
+    @JoinColumn(name = "bieder_id", nullable = false)
+    private Gebruiker bieder;
 
-    @NotNull
-    private long eigenaar; // gebruiker_id
+    @ManyToOne
+    @JoinColumn(name = "eigenaar_id", nullable = false)
+    private Gebruiker eigenaar;
 
     private Date eindDatum;
-
     private int bod;
 
-    // constructor;
-    public Bieding(long huisId, int prijs, long bieder, long eigenaar, int bod, Date eindDatum){
-        this.huisId = huisId;
+    // Constructor
+    public Bieding(Huis huis, int prijs, Gebruiker bieder, Gebruiker eigenaar, int bod, Date eindDatum) {
+        this.huis = huis;
         this.prijs = prijs;
         this.bieder = bieder;
         this.eigenaar = eigenaar;
@@ -42,9 +38,9 @@ public class Bieding {
         this.eindDatum = eindDatum;
     }
 
-    public Bieding(){
-    }
+    public Bieding() {}
 
+    // Getters en Setters
     public long getId() {
         return id;
     }
@@ -52,11 +48,11 @@ public class Bieding {
         this.id = id;
     }
 
-    public long getHuisId() {
-        return huisId;
+    public Huis getHuis() {
+        return huis;
     }
-    public void setHuisId(long huisId) {
-        this.huisId = huisId;
+    public void setHuis(Huis huis) {
+        this.huis = huis;
     }
 
     public int getPrijs() {
@@ -66,17 +62,17 @@ public class Bieding {
         this.prijs = prijs;
     }
 
-    public long getBieder() {
+    public Gebruiker getBieder() {
         return bieder;
     }
-    public void setBieder(long bieder) {
+    public void setBieder(Gebruiker bieder) {
         this.bieder = bieder;
     }
 
-    public long getEigenaar() {
+    public Gebruiker getEigenaar() {
         return eigenaar;
     }
-    public void setEigenaar(long eigenaar) {
+    public void setEigenaar(Gebruiker eigenaar) {
         this.eigenaar = eigenaar;
     }
 

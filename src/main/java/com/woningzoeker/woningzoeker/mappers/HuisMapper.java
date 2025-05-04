@@ -12,9 +12,9 @@ public class HuisMapper {
         HuisResponseDTO responseDTO = new HuisResponseDTO();
         responseDTO.setId(huis.getId());
         responseDTO.setAantalKamers(huis.getAantalKamers());
-        responseDTO.setAdres(huis.getAdres());
+        responseDTO.setAdres(huis.getLocatie().getAdres());
         responseDTO.setFotos(
-                huis.getHuisFoto()
+                huis.getHuisFotos()
                         .stream()
                         .map(HuisFoto::getFileName)
                         .toList()

@@ -3,13 +3,18 @@ package com.woningzoeker.woningzoeker.controllers;
 import com.woningzoeker.woningzoeker.dtos.ContactInfoResponseDTO;
 import com.woningzoeker.woningzoeker.mappers.ContactInfoMapper;
 import com.woningzoeker.woningzoeker.models.ContactInfo;
+import com.woningzoeker.woningzoeker.models.Gebruiker;
+import com.woningzoeker.woningzoeker.models.Profiel;
 import com.woningzoeker.woningzoeker.services.ContactInfoService;
+import com.woningzoeker.woningzoeker.services.GebruikerService;
+import com.woningzoeker.woningzoeker.services.ProfielService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 // ToDo nadenken over logging toevoegen. Nice to have indien er tijd over is.
 
@@ -18,8 +23,12 @@ import java.util.List;
 public class ContactInfoController {
 
     private final ContactInfoService contactInfoService;
-    public ContactInfoController(ContactInfoService contactInfoService) {
+    private final GebruikerService gebruikerService;
+    private final ProfielService profielService;
+    public ContactInfoController(ContactInfoService contactInfoService, GebruikerService gebruikerService, ProfielService profielService) {
         this.contactInfoService = contactInfoService;
+        this.gebruikerService = gebruikerService;
+        this.profielService = profielService;
     }
 
     @GetMapping
@@ -59,11 +68,10 @@ public class ContactInfoController {
             if (contactInfo.getTelefoonnummer() != null) {
                 dbContactInfo.setTelefoonnummer(contactInfo.getTelefoonnummer());
             }
-            if (contactInfo.getGebruikerId() != 0) {
-                dbContactInfo.setGebruikerId(contactInfo.getGebruikerId());
-            }
-            if (contactInfo.getProfielId() != 0) {
-                dbContactInfo.setProfielId(contactInfo.getProfielId());
+
+            if (contactInfo.getProfiel() != null && contactInfo.getProfiel().getId() != 0) {
+                Optional<Profiel> profielOpt = profielService.findById(contactInfo.getProfiel().getId());
+                profielOpt.ifPresent(dbContactInfo::setProfiel);
             }
 
             ContactInfo updateContactInfo = contactInfoService.save(dbContactInfo);
