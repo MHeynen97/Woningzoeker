@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface ContactInfoRepository extends JpaRepository<ContactInfo, Long> {
     List<ContactInfo> findByProfielId(long profielId);
-    List<ContactInfo> findByGebruikerId(long gebruikerId);
 }

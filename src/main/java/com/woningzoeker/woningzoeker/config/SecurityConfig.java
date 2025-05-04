@@ -38,14 +38,30 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/locatie/**").permitAll()
 
                         // Gebruikers en Profielen en ContactInfo GET: toegankelijk voor USER of ADMIN
-                        //.requestMatchers(HttpMethod.GET, "/profielen").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/gebruiker/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/profiel/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/contactinfo/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/bieding/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/berichten/**").hasAnyRole("USER", "ADMIN")
 
-                        // Alleen gebruikers mogen zelf bieden
-                        .requestMatchers(HttpMethod.POST, "/biedingen/**").hasAnyRole("USER", "ADMIN")
+                        // Alleen gebruikers mogen zelf aanmaken
+                        .requestMatchers(HttpMethod.POST, "/locatie/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/locatie/bulk").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/gebruiker/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/gebruiker/bulk").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/bieding/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/profiel/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/contactinfo/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/berichten/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/huis/**").hasAnyRole("USER", "ADMIN")
+
+
+                        //Alleen gebruikers mogen zelf aanpassen
+                        .requestMatchers(HttpMethod.PUT, "/locatie/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/profiel/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/bieding/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/contactinfo/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/huis/**").hasAnyRole("USER", "ADMIN")
 
                         // Alles wat aanpassen of verwijderen is (PUT/DELETE) is alleen voor Admins
                         .requestMatchers("/gebruiker/**").hasRole("ADMIN")

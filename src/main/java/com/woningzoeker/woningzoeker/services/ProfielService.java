@@ -41,7 +41,7 @@ public class ProfielService {
     }
 
     public List<Profiel> findByGebruikersnaam(String gebruikersnaam) {
-        return profielRepository.findByGebruikersnaam(gebruikersnaam);
+        return profielRepository.findByGebruiker_Gebruikersnaam(gebruikersnaam);
     }
 }
 

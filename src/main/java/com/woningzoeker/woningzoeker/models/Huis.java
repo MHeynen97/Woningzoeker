@@ -3,24 +3,28 @@ package com.woningzoeker.woningzoeker.models;
 import jakarta.persistence.*;
 
 import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name= "Huizen")
+@Table(name= "huizen")
 public class Huis {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private long id;
 
-    private String adres; // verwijzing tussen deze en locatie
+    @OneToOne
+    @JoinColumn(name = "locatie_id")
+    private Locatie locatie;
+    private int prijs;
 
-    private int prijs; //verwijzing tussen deze en bieding
+    @OneToMany(mappedBy = "huis")
+    private List<Bieding> biedingen = new ArrayList<>();//verwijzing tussen deze en bieding
 
     private int aantalKamers;
 
     private String energieLabel;
-
-    private String fotos; // juiste formaat? Upload en download optie.
 
     private String omschrijving;
 
@@ -32,73 +36,92 @@ public class Huis {
         Koop
     }
 
+    @OneToMany
+    @JoinColumn(name = "huis_id")
+    private List<HuisFoto> huisFotos = new ArrayList<>();
+
     //Constructor
-    public Huis(String adres,int prijs, int aantalKamers, String energieLabel, String fotos, String omschrijving, HuurKoop huurkoop){
-        this.adres = adres;
+    public Huis(int prijs, int aantalKamers, String energieLabel, String omschrijving, HuurKoop huurkoop){
         this.prijs = prijs;
         this.aantalKamers = aantalKamers;
         this.energieLabel = energieLabel;
-        this.fotos = fotos;
         this.omschrijving = omschrijving;
         this.huurkoop = huurkoop;
     }
     public Huis(){
     }
 
-    // getters en setters
+    // getters
     public long getId() {
-        return Id;
-    }
-    public void setId(long id) {
-        Id = id;
+        return id;
     }
 
-    public String getAdres() {
-        return adres;
-    }
-    public void setAdres(String adres) {
-        this.adres = adres;
+    public Locatie getLocatie() {
+        return locatie;
     }
 
     public int getPrijs() {
         return prijs;
     }
-    public void setPrijs(int prijs) {
-        this.prijs = prijs;
+
+    public List<Bieding> getBiedingen() {
+        return biedingen;
     }
 
     public int getAantalKamers() {
         return aantalKamers;
     }
-    public void setAantalKamers(int aantalKamers) {
-        this.aantalKamers = aantalKamers;
-    }
 
     public String getEnergieLabel() {
         return energieLabel;
-    }
-    public void setEnergieLabel(String energieLabel) {
-        this.energieLabel = energieLabel;
-    }
-
-    public String getFotos() {
-        return fotos;
-    }
-    public void setFotos(String fotos) {
-        this.fotos = fotos;
     }
 
     public String getOmschrijving() {
         return omschrijving;
     }
-    public void setOmschrijving(String omschrijving) {
-        this.omschrijving = omschrijving;
-    }
 
     public HuurKoop getHuurkoop() {
         return huurkoop;
     }
+
+    public List<HuisFoto> getHuisFotos() {
+        return huisFotos;
+    }
+
+    // setters
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setLocatie(Locatie locatie) {
+        this.locatie = locatie;
+    }
+
+    public void setPrijs(int prijs) {
+        this.prijs = prijs;
+    }
+
+    public void setBiedingen(List<Bieding> biedingen) {
+        this.biedingen = biedingen;
+    }
+
+    public void setAantalKamers(int aantalKamers) {
+        this.aantalKamers = aantalKamers;
+    }
+
+    public void setEnergieLabel(String energieLabel) {
+        this.energieLabel = energieLabel;
+    }
+
+    public void setOmschrijving(String omschrijving) {
+        this.omschrijving = omschrijving;
+    }
+
     public void setHuurkoop(HuurKoop huurkoop) {
         this.huurkoop = huurkoop;
+    }
+
+    public void setHuisFotos(List<HuisFoto> huisFotos) {
+        this.huisFotos = huisFotos;
     }
 }

@@ -3,32 +3,31 @@ package com.woningzoeker.woningzoeker.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "ContactInformatie")
+@Table(name = "contactInformatie")
 public class ContactInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private long profielId;
-
-    private long gebruikerId;
+    @OneToOne
+    @JoinColumn(name = "profiel_id") // de naam van de kolom die de relatie zal houden
+    private Profiel profiel;
 
     private String email;
 
     private String telefoonnummer;
 
-    //constructor
-    public ContactInfo(long profielId, long gebruikerId, String email, String telefoonnummer){
-        this.profielId = profielId;
-        this.gebruikerId = gebruikerId;
+    // constructor
+    public ContactInfo(Profiel profiel, String email, String telefoonnummer) {
+        this.profiel = profiel;
         this.email = email;
         this.telefoonnummer = telefoonnummer;
     }
 
     public ContactInfo() {}
 
-    //getters en setters
+    // getters en setters
     public long getId() {
         return id;
     }
@@ -37,20 +36,12 @@ public class ContactInfo {
         this.id = id;
     }
 
-    public long getProfielId() {
-        return profielId;
+    public Profiel getProfiel() {
+        return profiel;
     }
 
-    public void setProfielId(long profielId) {
-        this.profielId = profielId;
-    }
-
-    public long getGebruikerId() {
-        return gebruikerId;
-    }
-
-    public void setGebruikerId(long gebruikerId) {
-        this.gebruikerId = gebruikerId;
+    public void setProfiel(Profiel profiel) {
+        this.profiel = profiel;
     }
 
     public String getEmail() {

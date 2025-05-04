@@ -10,16 +10,28 @@ public class ProfielMapper {
     public static ProfielResponseDTO toResponseDTO(Profiel profiel) {
         ProfielResponseDTO responseDTO = new ProfielResponseDTO();
         responseDTO.setId(profiel.getId());
-        responseDTO.setEmail(profiel.getEmail());
-        responseDTO.setGeboortedatum(profiel.getGeboortedatum());
-        responseDTO.setGebruikersnaam(profiel.getGebruikersnaam());
         responseDTO.setNaam(profiel.getNaam());
-        responseDTO.setFavorieteHuizen(profiel.getFavorieteHuizen());
-        responseDTO.setInkomendeBerichten(profiel.getInkomendeBerichten());
-        responseDTO.setUitgaandeBerichten(profiel.getUitgaandeBerichten());
+        responseDTO.setGeboortedatum(profiel.getGeboortedatum());
         responseDTO.setOmschrijving(profiel.getOmschrijving());
-        responseDTO.setTelefoonnummer(profiel.getTelefoonnummer());
-        responseDTO.setWoonplaats(profiel.getWoonplaats());
+
+        // Haal gebruikersnaam op uit gekoppelde gebruiker
+        if (profiel.getGebruiker() != null) {
+            responseDTO.setGebruikersnaam(profiel.getGebruiker().getGebruikersnaam());
+        }
+        responseDTO.setFavorieteHuizen(profiel.getFavorieteHuizen());
+
+        responseDTO.setOmschrijving(profiel.getOmschrijving());
+
+        // Haal email en telefoonnummer op uit contactInfo
+        if (profiel.getContactInfo() != null) {
+            responseDTO.setEmail(profiel.getContactInfo().getEmail());
+            responseDTO.setTelefoonnummer(profiel.getContactInfo().getTelefoonnummer());
+        }
+
+        // Haal woonplaats op uit locatie
+        if (profiel.getLocatie() != null) {
+            responseDTO.setWoonplaats(profiel.getLocatie().getWoonplaats());
+        }
 
         return responseDTO;
     }
